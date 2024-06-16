@@ -29,8 +29,8 @@ const message = document.getElementById('message');
 // ambil isi input field
 // tambah kan isi input field ke dalam array 
 // buat table row sesuai dengan input field
-function createRow (data) {
-    
+function createRow(data) {
+
     const row = document.createElement('tr');
     row.classList.add('bg-white', 'border-b', 'dark:bg-gray-800', 'dark:border-gray-700', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
 
@@ -91,9 +91,9 @@ buttonUpdate.addEventListener('click', (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form));
     // ubah value dari key nya sesuai input data update
-    dataContact[data.id-1] = data;
+    dataContact[data.id - 1] = data;
     const tbody = document.querySelector('tbody');
-    const oldRow = tbody.getElementsByTagName('tr')[data.id-1];
+    const oldRow = tbody.getElementsByTagName('tr')[data.id - 1];
     const row = createRow(data);
     tbody.replaceChild(row, oldRow);
     form.classList.add('hidden');
@@ -106,7 +106,7 @@ buttonUpdate.addEventListener('click', (e) => {
 const buttonAdd = document.querySelector('#button-add');
 
 function openForm(data) {
-    return function () {
+    return function (e) {
         id.value = data.id;
         firstName.value = data.firstName;
         lastName.value = data.lastName;
@@ -122,15 +122,37 @@ function openForm(data) {
             form.classList.add('hidden');
             overlay.classList.add('hidden');
         });
+
     }
 }
 
 // cara nya adalah dengan membuat form baru ketika event edit
 // dan membuat event submit baru ketika form edit di submit
 // dapat kan elemen nya dan ganti innertext nya sesuai input
-buttonAdd.addEventListener('click',() => openForm({...emptyData,id:dataContact.length+1})());
+buttonAdd.addEventListener('click', (e) => openForm({ ...emptyData, id: dataContact.length + 1 })());
 
 function editContact(e) {
     const rowIndex = e.target.parentElement.parentElement.rowIndex;
-    openForm(dataContact[rowIndex-1])();
+    openForm(dataContact[rowIndex - 1])();
 }
+
+
+// search feature
+
+const buttonSearch = document.querySelector('#search');
+const searchInput = document.querySelector('#default-search');
+
+buttonSearch.addEventListener('click', () => {
+    // jika di klik maka hanya akan menampil kan
+    // include dari string input
+    const tbody = document.querySelector('tbody');
+    const children = document.querySelectorAll('tbody tr');
+    children.forEach((child,index) => {
+        console.log(child.firstChild)
+        if (child.firstChild.textContent.includes(searchInput.value)) {
+            children[index].classList.remove('hidden');
+        } else {
+            children[index].classList.add('hidden');
+        }
+    })
+});
