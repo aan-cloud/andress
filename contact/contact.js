@@ -69,7 +69,6 @@ form.addEventListener('submit', (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.target))
     // pecah pecah function agar bisa di gunakkan kembali
-    // 
     dataContact.push(data);
     // sampai sini
     // ambil data nya pakai get element
