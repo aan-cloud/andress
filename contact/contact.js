@@ -55,7 +55,7 @@ function createRow(data) {
     row.appendChild(country);
 
     const edit = document.createElement('td');
-    edit.classList.add('px-6', 'py-4');
+    edit.classList.add('px-6', 'py-4', 'flex', 'flex-col');
     row.appendChild(edit);
 
     const textEdit = document.createElement('button');
@@ -63,8 +63,15 @@ function createRow(data) {
     textEdit.innerText = 'edit';
     textEdit.onclick = editContact;
     edit.appendChild(textEdit);
+
+    const textDelete = document.createElement('button');
+    textDelete.classList.add('font-medium', 'text-red-600', 'dark:text-red-500', 'hover:underline', 'edit');
+    textDelete.innerText = 'delete';
+    textDelete.onclick = deleteContact;
+    edit.appendChild(textDelete);
     return row
 }
+
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.target))
@@ -106,7 +113,7 @@ buttonUpdate.addEventListener('click', (e) => {
 const buttonAdd = document.querySelector('#button-add');
 
 function openForm(data) {
-    return function (e) {
+    return function () {
         id.value = data.id;
         firstName.value = data.firstName;
         lastName.value = data.lastName;
@@ -116,6 +123,7 @@ function openForm(data) {
 
         form.classList.remove('hidden');
         overlay.classList.remove('hidden');
+        document.querySelector('#add').classList.add('hidden');
 
         // close button
         document.getElementById('close-btn').addEventListener('click', () => {
@@ -129,11 +137,26 @@ function openForm(data) {
 // cara nya adalah dengan membuat form baru ketika event edit
 // dan membuat event submit baru ketika form edit di submit
 // dapat kan elemen nya dan ganti innertext nya sesuai input
-buttonAdd.addEventListener('click', (e) => openForm({ ...emptyData, id: dataContact.length + 1 })());
+buttonAdd.addEventListener('click', (e) => {
+    if (e.target.innerText === 'Add contact') {
+        openForm({ ...emptyData, id: dataContact.length + 1 })();
+        document.querySelector('#add').classList.remove('hidden');
+        document.querySelector('#update').classList.add('hidden');
+    }
+});
 
 function editContact(e) {
-    const rowIndex = e.target.parentElement.parentElement.rowIndex;
-    openForm(dataContact[rowIndex - 1])();
+    if (e.target.innerText === 'edit') {
+        const rowIndex = e.target.parentElement.parentElement.rowIndex;
+        openForm(dataContact[rowIndex - 1])();
+        document.querySelector('#add').classList.add('hidden');
+        document.querySelector('#update').classList.remove('hidden');
+    }
+}
+
+function deleteContact (e) {
+    const rowIndex = e.target.parentElement.parentElement;
+    rowIndex.remove();
 }
 
 
@@ -142,17 +165,18 @@ function editContact(e) {
 const buttonSearch = document.querySelector('#search');
 const searchInput = document.querySelector('#default-search');
 
-buttonSearch.addEventListener('click', () => {
+buttonSearch.addEventListener('click', (e) => {
     // jika di klik maka hanya akan menampil kan
     // include dari string input
     const tbody = document.querySelector('tbody');
     const children = document.querySelectorAll('tbody tr');
-    children.forEach((child,index) => {
+    children.forEach((child, index) => {
         console.log(child.firstChild)
         if (child.firstChild.textContent.includes(searchInput.value)) {
             children[index].classList.remove('hidden');
         } else {
             children[index].classList.add('hidden');
         }
-    })
+    });
+
 });
