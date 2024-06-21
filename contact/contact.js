@@ -65,6 +65,7 @@ function createRow(data) {
     edit.appendChild(textEdit);
 
     const textDelete = document.createElement('button');
+    textDelete.setAttribute('id', `${data.id}`);
     textDelete.classList.add('font-medium', 'text-red-600', 'dark:text-red-500', 'hover:underline', 'edit');
     textDelete.innerText = 'delete';
     textDelete.onclick = deleteContact;
@@ -88,7 +89,7 @@ form.addEventListener('submit', (e) => {
     form.classList.add('hidden');
     overlay.classList.add('hidden');
     message.remove();
-    console.log(dataContact)
+    console.log(dataContact);
 });
 
 buttonUpdate.addEventListener('click', (e) => {
@@ -151,14 +152,17 @@ function editContact(e) {
         openForm(dataContact[rowIndex - 1])();
         document.querySelector('#add').classList.add('hidden');
         document.querySelector('#update').classList.remove('hidden');
-    }
-}
+    };
+};
 
 function deleteContact (e) {
-    const rowIndex = e.target.parentElement.parentElement;
-    rowIndex.remove();
-}
-
+    const rowIndexElm = e.target.parentElement.parentElement;
+    rowIndexElm.remove();
+    // dapat kan index tombol
+    // hapus data sesuai index
+    const index = e.target.getAttribute('id');
+    dataContact.splice(index-1,1);
+};
 
 // search feature
 
