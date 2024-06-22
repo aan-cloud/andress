@@ -139,7 +139,7 @@ function openForm(data) {
 // dan membuat event submit baru ketika form edit di submit
 // dapat kan elemen nya dan ganti innertext nya sesuai input
 buttonAdd.addEventListener('click', (e) => {
-    if (e.target.innerText === 'Add contact') {
+    if (e.target.innerText === 'Add') {
         openForm({ ...emptyData, id: dataContact.length + 1 })();
         document.querySelector('#add').classList.remove('hidden');
         document.querySelector('#update').classList.add('hidden');
